@@ -1,24 +1,27 @@
 # Mengaktifkan pengaturan URL Rewrite
 RewriteEngine On
-RewriteBase /
 
 # Mencegah direktori dilihat isinya demi keamanan
 Options -Indexes
 
-# 1. Jangan ubah atau alihkan file apa pun yang berada di dalam folder Controller
+# 1. ABAIKAN LANGSUNG: Jika yang diminta adalah file nyata (seperti gambar uploads, CSS, JS) atau folder nyata
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2. PENGECUALIAN CONTROLLER: Jangan utak-atik URL di dalam folder Controller
 RewriteCond %{REQUEST_URI} ^/Controller/ [NC]
 RewriteRule .* - [L]
 
-# 2. Secara otomatis membuang ekstensi .php dari address bar browser
+# 3. PENGALIHAN OTOMATIS: Buang .php dari address bar (HANYA untuk method GET, tidak mengganggu POST login)
+RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L,NE]
 
-# 3. Cek file .php di root folder (htdocs)
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.+)$ $1.php [L]
+# 4. REWRITE INTERNAL: Memetakan URL tanpa .php ke file .php di Root
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
 
-# 4. Cek file .php di dalam subfolder (seperti View/v_login.php)
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/$1\.php -f
-RewriteRule ^(.+)$ $1\.php [L]
+# 5. REWRITE INTERNAL SUBFOLDER: Memetakan ke folder View (contoh: /View/v_admin)
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.+)$ $1.php [L]

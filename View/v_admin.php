@@ -141,16 +141,16 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
                 <a href="v_admin.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-inner transition-all">
                     <i class="fa-solid fa-border-all text-base w-5"></i> <span class="font-bold">Dashboard</span>
                 </a>
-                <a href="v_histori_aspirasi.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_histori_aspirasi" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Histori Selesai
                 </a>
 
                 <div class="px-2 py-3 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Manajemen Data</div>
 
-                <a href="v_kelola_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_kelola_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-users text-base w-5 group-hover:text-white transition-colors"></i> Kelola Siswa
                 </a>
-                <a href="v_kelola_kategori.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_kelola_kategori" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-tags text-base w-5 group-hover:text-white transition-colors"></i> Kelola Kategori
                 </a>
             </nav>

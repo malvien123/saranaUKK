@@ -1,10 +1,10 @@
 <?php
 class m_koneksi
 {
-    private $host     = "sql306.infinityfree.com";
-    private $username = "if0_43107389";
-    private $pass     = "IsIoFrmTFY1";
-    private $db       = "if0_43107389_sarpras";
+    private $host     = "localhost";
+    private $username = "root";
+    private $pass     = "";
+    private $db       = "sarpras";
 
     public $koneksi;
 
