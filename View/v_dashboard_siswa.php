@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // 1. Cek apakah sudah login
 if (!isset($_SESSION['role'])) {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -19,7 +19,7 @@ if ($_SESSION['role'] === 'admin') {
 
 // 3. Pastikan rolenya benar-benar siswa
 if ($_SESSION['role'] !== 'siswa') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -123,17 +123,17 @@ $total_selesai = count($aspirasi_selesai);
             <div class="px-6 py-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Menu Utama</div>
 
             <nav class="px-4 space-y-1.5 text-sm font-medium">
-                <a href="v_dashboard_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-inner transition-all">
+                <a href="v_dashboard_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-inner transition-all">
                     <i class="fa-solid fa-house-chimney text-base w-5"></i> <span class="font-bold">Dashboard</span>
                 </a>
-                <a href="v_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-pen-to-square text-base w-5 group-hover:text-white transition-colors"></i> Form Aspirasi
                 </a>
-                <a href="v_history_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
-                    <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Pengaduan 
+                <a href="v_history_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                    <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Pengaduan
                 </a>
-                <a href="v_history_selesai_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
-                    <i class="fa-solid fa-circle-check text-base w-5 group-hover:text-white transition-colors"></i> Riwayat 
+                <a href="v_history_selesai_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                    <i class="fa-solid fa-circle-check text-base w-5 group-hover:text-white transition-colors"></i> Riwayat
                 </a>
             </nav>
         </div>
@@ -149,7 +149,7 @@ $total_selesai = count($aspirasi_selesai);
                     <div class="text-[11px] text-slate-400 truncate">NIS: <?= htmlspecialchars($nis_login); ?></div>
                 </div>
             </div>
-            <a href="v_logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
+            <a href="v_logout" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
                 <i class="fa-solid fa-power-off"></i> Keluar Aplikasi
             </a>
         </div>
@@ -197,7 +197,7 @@ $total_selesai = count($aspirasi_selesai);
                         <p class="text-sm text-slate-300 max-w-2xl leading-relaxed font-medium">Bantu kami menjaga kenyamanan sekolah. Laporkan fasilitas sarana dan prasarana yang rusak atau membutuhkan perbaikan melalui portal ini.</p>
                     </div>
                     <div class="w-full lg:w-auto flex shrink-0">
-                        <a href="v_siswa.php" class="w-full sm:w-auto text-center bg-white text-slate-900 hover:bg-cyan-50 font-bold px-6 py-3.5 rounded-2xl text-sm transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2">
+                        <a href="v_siswa" class="w-full sm:w-auto text-center bg-white text-slate-900 hover:bg-cyan-50 font-bold px-6 py-3.5 rounded-2xl text-sm transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2">
                             <i class="fa-solid fa-plus-circle"></i> Buat Pengaduan Baru
                         </a>
                     </div>
@@ -251,7 +251,7 @@ $total_selesai = count($aspirasi_selesai);
                         <h3 class="font-bold text-slate-800 text-lg">Aktivitas Laporan Terbaru</h3>
                         <p class="text-xs text-slate-500 mt-1 font-medium hidden sm:block">Status terkini dari pengaduan yang baru saja Anda kirimkan.</p>
                     </div>
-                    <a href="v_history_siswa.php" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[11px] px-4 py-2 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 shrink-0">
+                    <a href="v_history_siswa" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[11px] px-4 py-2 rounded-xl shadow-sm transition-colors flex items-center gap-1.5 shrink-0">
                         Lihat Semua <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -320,7 +320,7 @@ $total_selesai = count($aspirasi_selesai);
                                             </div>
                                             <h4 class="text-base font-bold text-slate-700">Belum Ada Pengaduan</h4>
                                             <p class="text-sm text-slate-500 mt-1 max-w-sm">Anda belum pernah membuat laporan kerusakan sarana prasarana.</p>
-                                            <a href="v_siswa.php" class="mt-4 bg-cyan-50 text-cyan-700 font-bold px-4 py-2 rounded-xl text-xs hover:bg-cyan-100 transition">Buat Laporan Sekarang</a>
+                                            <a href="v_siswa" class="mt-4 bg-cyan-50 text-cyan-700 font-bold px-4 py-2 rounded-xl text-xs hover:bg-cyan-100 transition">Buat Laporan Sekarang</a>
                                         </div>
                                     </td>
                                 </tr>

@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Proteksi Admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -84,7 +84,7 @@ if ($statusText == 'proses') {
     <!-- HEADER (GLASSMORPHISM) -->
     <header class="bg-white/70 backdrop-blur-lg border-b border-slate-200/60 px-6 py-4 flex justify-between items-center sticky top-0 z-30 transition-all">
         <div class="flex items-center gap-4">
-            <a href="v_admin.php" class="bg-white hover:bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-slate-700 shadow-sm transition-all focus:ring-2 focus:ring-indigo-500/20 group" title="Kembali ke Dashboard">
+            <a href="v_admin" class="bg-white hover:bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-slate-700 shadow-sm transition-all focus:ring-2 focus:ring-indigo-500/20 group" title="Kembali ke Dashboard">
                 <i class="fa-solid fa-arrow-left group-hover:-translate-x-0.5 transition-transform"></i>
             </a>
             <div>

@@ -20,6 +20,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // 5. Redirect pengguna kembali ke halaman login (sejajar di dalam folder View)
-header("Location: v_login.php");
+header("Location: v_login");
 exit();
 ?>

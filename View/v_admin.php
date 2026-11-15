@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // 1. Cek apakah sudah login
 if (!isset($_SESSION['role'])) {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -19,7 +19,7 @@ if ($_SESSION['role'] === 'siswa') {
 
 // 3. Pastikan rolenya benar-benar admin
 if ($_SESSION['role'] !== 'admin') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -138,7 +138,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
             <div class="px-6 py-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Menu Utama</div>
 
             <nav class="px-4 space-y-1.5 text-sm font-medium">
-                <a href="v_admin.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-inner transition-all">
+                <a href="v_admin" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-inner transition-all">
                     <i class="fa-solid fa-border-all text-base w-5"></i> <span class="font-bold">Dashboard</span>
                 </a>
                 <a href="v_histori_aspirasi" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
@@ -156,7 +156,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
             </nav>
         </div>
         <div class="p-5 border-t border-white/5">
-            <a href="v_logout.php" onclick="return confirm('Sesi Anda akan diakhiri. Lanjutkan?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
+            <a href="v_logout" onclick="return confirm('Sesi Anda akan diakhiri. Lanjutkan?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
                 <i class="fa-solid fa-power-off"></i> Keluar Aplikasi
             </a>
         </div>
@@ -194,7 +194,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
                     <p class="text-sm text-slate-300 max-w-xl leading-relaxed font-medium">Tanggapi atau tolak laporan masuk agar sarana dan prasarana sekolah tetap terpelihara dengan baik.</p>
                 </div>
                 <div class="relative z-10 w-full sm:w-auto flex shrink-0">
-                    <a href="v_histori_aspirasi.php" class="w-full sm:w-auto text-center bg-white text-slate-900 hover:bg-indigo-50 font-bold px-6 py-3.5 rounded-2xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                    <a href="v_histori_aspirasi" class="w-full sm:w-auto text-center bg-white text-slate-900 hover:bg-indigo-50 font-bold px-6 py-3.5 rounded-2xl text-sm transition-all shadow-md flex items-center justify-center gap-2">
                         Histori Arsip <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
@@ -267,7 +267,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto">
                             <button type="submit" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-900 text-white font-semibold py-2.5 px-5 rounded-xl text-xs transition-all shadow-sm">Filter</button>
-                            <a href="v_admin.php" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 font-semibold py-2.5 px-3.5 rounded-xl text-xs flex items-center justify-center shadow-sm"><i class="fa-solid fa-rotate-right"></i></a>
+                            <a href="v_admin" class="bg-white hover:bg-slate-100 border border-slate-200 text-slate-600 font-semibold py-2.5 px-3.5 rounded-xl text-xs flex items-center justify-center shadow-sm"><i class="fa-solid fa-rotate-right"></i></a>
                         </div>
                     </form>
                 </div>
@@ -364,7 +364,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
                                                 </a>
 
                                                 <!-- Tombol Tindak Lanjuti (Pill + Gradient + Glow + Icon Slide) -->
-                                                <a href="v_tanggapan.php?id=<?= $row['id_aspirasi'] ?>"
+                                                <a href="v_tanggapan?id=<?= $row['id_aspirasi'] ?>"
                                                     class="group relative overflow-hidden flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-[11px] font-bold shadow-md shadow-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all duration-300"
                                                     title="Proses / Tindak Lanjuti">
                                                     <span class="relative z-10 flex items-center gap-1.5">
@@ -418,7 +418,7 @@ if (!empty($tanggal) || !empty($bulan) || !empty($id_kategori)) {
                                         </a>
 
                                         <!-- Tombol Tindak Lanjuti Mobile (Lebih Lebar / flex-[2]) -->
-                                        <a href="v_tanggapan.php?id=<?= $row['id_aspirasi'] ?>"
+                                        <a href="v_tanggapan?id=<?= $row['id_aspirasi'] ?>"
                                             class="flex-[2] group flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md shadow-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/50 py-3 rounded-2xl font-bold text-xs transition-all duration-300 active:scale-95 hover:-translate-y-0.5">
                                             Tindak Lanjuti <i class="fa-solid fa-arrow-right-long group-hover:translate-x-1.5 transition-transform duration-300"></i>
                                         </a>

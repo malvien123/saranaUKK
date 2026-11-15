@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Proteksi Halaman: Pastikan hanya siswa yang bisa mengakses
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'siswa') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -72,17 +72,17 @@ $list_kategori = $modelKategori->getAllKategori();
             <div class="px-6 py-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Menu Utama</div>
 
             <nav class="px-4 space-y-1.5 text-sm font-medium">
-                <a href="v_dashboard_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_dashboard_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-house-chimney text-base w-5 group-hover:text-white transition-colors"></i> Dashboard
                 </a>
-                <a href="v_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-inner transition-all">
+                <a href="v_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-inner transition-all">
                     <i class="fa-solid fa-pen-to-square text-base w-5"></i> <span class="font-bold">Form Aspirasi</span>
                 </a>
-                <a href="v_history_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
-                    <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Pengaduan 
+                <a href="v_history_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                    <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Pengaduan
                 </a>
-                <a href="v_history_selesai_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
-                    <i class="fa-solid fa-circle-check text-base w-5 group-hover:text-white transition-colors"></i> Riwayat 
+                <a href="v_history_selesai_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                    <i class="fa-solid fa-circle-check text-base w-5 group-hover:text-white transition-colors"></i> Riwayat
                 </a>
             </nav>
         </div>
@@ -98,7 +98,7 @@ $list_kategori = $modelKategori->getAllKategori();
                     <div class="text-[11px] text-slate-400 truncate">NIS: <?= htmlspecialchars($nis_login); ?></div>
                 </div>
             </div>
-            <a href="v_logout.php" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
+            <a href="v_logout" onclick="return confirm('Apakah Anda yakin ingin keluar dari sistem?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
                 <i class="fa-solid fa-power-off"></i> Keluar Aplikasi
             </a>
         </div>

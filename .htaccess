@@ -1,27 +1,29 @@
 # Mengaktifkan pengaturan URL Rewrite
 RewriteEngine On
-
-# Mencegah direktori dilihat isinya demi keamanan
 Options -Indexes
 
-# 1. ABAIKAN LANGSUNG: Jika yang diminta adalah file nyata (seperti gambar uploads, CSS, JS) atau folder nyata
+# 1. Abaikan file fisik atau folder nyata (gambar, CSS, JS, folder uploads)
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# 2. PENGECUALIAN CONTROLLER: Jangan utak-atik URL di dalam folder Controller
-RewriteCond %{REQUEST_URI} ^/Controller/ [NC]
+# 2. Pengecualian folder khusus agar tidak terganggu rewrite
+RewriteCond %{REQUEST_URI} ^/(uploads|Controller)/ [NC]
 RewriteRule .* - [L]
 
-# 3. PENGALIHAN OTOMATIS: Buang .php dari address bar (HANYA untuk method GET, tidak mengganggu POST login)
+# 3. REDIRECT EKSTERNAL: Jika ada user/link lama yang masih mengakses .php, paksa buang .php-nya dari address bar
 RewriteCond %{REQUEST_METHOD} !POST
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L,NE]
 
-# 4. REWRITE INTERNAL: Memetakan URL tanpa .php ke file .php di Root
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)$ $1.php [L]
+# 4. REWRITE INTERNAL (FOLDER VIEW & ROOT): 
+# Memetakan URL bersih (tanpa .php) ke file .php aslinya secara transparan di background
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/saranaUKK/View/$1.php -f
+RewriteRule ^(.+)$ View/$1.php [L]
 
-# 5. REWRITE INTERNAL SUBFOLDER: Memetakan ke folder View (contoh: /View/v_admin)
-RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/saranaUKK/$1.php -f
 RewriteRule ^(.+)$ $1.php [L]

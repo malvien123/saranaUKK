@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // 1. Cek apakah sudah login
 if (!isset($_SESSION['role'])) {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -19,7 +19,7 @@ if ($_SESSION['role'] === 'siswa') {
 
 // 3. Pastikan rolenya benar-benar admin
 if ($_SESSION['role'] !== 'admin') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 
@@ -93,25 +93,25 @@ $list_selesai = $modelAspirasi->getAspirasiSelesaiLimit($limit, $offset);
             <div class="px-6 py-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Menu Utama</div>
 
             <nav class="px-4 space-y-1.5 text-sm font-medium">
-                <a href="v_admin.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_admin" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-border-all text-base w-5 group-hover:text-white transition-colors"></i> Dashboard
                 </a>
-                <a href="v_histori_aspirasi.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-inner transition-all">
+                <a href="v_histori_aspirasi" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-inner transition-all">
                     <i class="fa-solid fa-clock-rotate-left text-base w-5"></i> <span class="font-bold">Histori Selesai</span>
                 </a>
 
                 <div class="px-2 py-3 text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-2">Manajemen Data</div>
 
-                <a href="v_kelola_siswa.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_kelola_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-users text-base w-5 group-hover:text-white transition-colors"></i> Kelola Siswa
                 </a>
-                <a href="v_kelola_kategori.php" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
+                <a href="v_kelola_kategori" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-slate-200 transition-all group">
                     <i class="fa-solid fa-tags text-base w-5 group-hover:text-white transition-colors"></i> Kelola Kategori
                 </a>
             </nav>
         </div>
         <div class="p-5 border-t border-white/5">
-            <a href="v_logout.php" onclick="return confirm('Sesi Anda akan diakhiri. Lanjutkan?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
+            <a href="v_logout" onclick="return confirm('Sesi Anda akan diakhiri. Lanjutkan?')" class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/20 transition-all text-sm font-semibold shadow-sm">
                 <i class="fa-solid fa-power-off"></i> Keluar Aplikasi
             </a>
         </div>

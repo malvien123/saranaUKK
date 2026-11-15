@@ -6,10 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
 // Jika sudah login, langsung arahkan ke halaman sesuai role
 if (isset($_SESSION['role'])) {
     if ($_SESSION['role'] === 'admin') {
-        header("Location: v_admin.php");
+        header("Location: v_admin");
         exit();
     } else if ($_SESSION['role'] === 'siswa') {
-        header("Location: v_siswa.php");
+        header("Location: v_siswa");
         exit();
     }
 }
@@ -31,7 +31,7 @@ if (isset($_SESSION['role'])) {
 <body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-slate-100 flex justify-center items-center min-h-screen">
 
     <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-        
+
         <!-- Header / Logo Title -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-xl shadow-md mb-4 text-2xl font-bold">
@@ -49,7 +49,8 @@ if (isset($_SESSION['role'])) {
                     <span class="block sm:inline font-medium"><?= htmlspecialchars($_SESSION['error_login']) ?></span>
                 </div>
             </div>
-            <?php unset($_SESSION['error_login']); // Hapus session agar tidak muncul terus saat refresh ?>
+            <?php unset($_SESSION['error_login']); // Hapus session agar tidak muncul terus saat refresh 
+            ?>
         <?php endif; ?>
         <!-- AKHIR ALERT LOGIN GAGAL -->
 
@@ -66,8 +67,8 @@ if (isset($_SESSION['role'])) {
                 <input type="password" id="password" name="password" placeholder="Masukkan Password" required
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition duration-200">
             </div>
-            
-            <button type="submit" 
+
+            <button type="submit"
                 class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer text-sm tracking-wide">
                 Masuk ke Sistem
             </button>

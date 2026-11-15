@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 ?>
@@ -45,7 +45,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                 <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
                     Simpan Kategori
                 </button>
-                <a href="v_kelola_kategori.php" class="block w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg text-xs transition text-center">
+                <a href="v_kelola_kategori" class="block w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg text-xs transition text-center">
                     Batal
                 </a>
             </div>

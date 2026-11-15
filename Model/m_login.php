@@ -55,4 +55,3 @@ class m_login
         return false;
     }
 }
-?>

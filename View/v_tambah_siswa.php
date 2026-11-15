@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: v_login.php");
+    header("Location: v_login");
     exit();
 }
 ?>
@@ -34,7 +34,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         <form action="../Controller/c_siswa.php?action=tambah" method="POST" class="space-y-4">
 
             <!-- NIS -->
-            <!-- Contoh pada input NIS di Form Tambah Siswa / Login -->
             <div>
                 <label class="block text-xs font-semibold text-gray-600 mb-1">NIS (Nomor Induk Siswa)</label>
                 <input type="text" name="nis" required
@@ -77,7 +76,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
                 <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs transition shadow-sm cursor-pointer">
                     Simpan Data
                 </button>
-                <a href="v_kelola_siswa.php" class="block w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg text-xs transition text-center">
+                <a href="v_kelola_siswa" class="block w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg text-xs transition text-center">
                     Batal
                 </a>
             </div>

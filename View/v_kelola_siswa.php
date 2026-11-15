@@ -256,7 +256,7 @@ $list_siswa = $m_siswa->getAllSiswa();
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <div class="flex items-center justify-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
-                                                <a href="v_edit_siswa.php?nis=<?= $siswa['nis'] ?>" class="w-8 h-8 rounded-xl bg-white border border-amber-200 text-amber-500 hover:bg-amber-50 hover:border-amber-400 hover:shadow-sm transition-all flex items-center justify-center" title="Edit Data">
+                                                <a href="v_edit_siswa?nis=<?= $siswa['nis'] ?>" class="w-8 h-8 rounded-xl bg-white border border-amber-200 text-amber-500 hover:bg-amber-50 hover:border-amber-400 hover:shadow-sm transition-all flex items-center justify-center" title="Edit Data">
                                                     <i class="fa-solid fa-pen text-xs"></i>
                                                 </a>
                                                 <a href="../Controller/c_siswa.php?action=hapus&nis=<?= $siswa['nis'] ?>" onclick="return confirm('Peringatan: Menghapus data siswa juga dapat menghilangkan akses login mereka. Lanjutkan?')" class="w-8 h-8 rounded-xl bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-400 hover:shadow-sm transition-all flex items-center justify-center" title="Hapus Data">
@@ -313,7 +313,7 @@ $list_siswa = $m_siswa->getAllSiswa();
                                     </div>
 
                                     <div class="flex gap-2 pt-3 border-t border-slate-100">
-                                        <a href="v_edit_siswa.php?nis=<?= $siswa['nis'] ?>" class="flex-1 flex items-center justify-center gap-2 bg-white border border-amber-200 text-amber-600 px-3 py-2.5 rounded-xl font-bold text-[11px] shadow-sm hover:bg-amber-50">
+                                        <a href="v_edit_siswa?nis=<?= $siswa['nis'] ?>" class="flex-1 flex items-center justify-center gap-2 bg-white border border-amber-200 text-amber-600 px-3 py-2.5 rounded-xl font-bold text-[11px] shadow-sm hover:bg-amber-50">
                                             <i class="fa-solid fa-pen"></i> Edit Profil
                                         </a>
                                         <a href="../Controller/c_siswa.php?action=hapus&nis=<?= $siswa['nis'] ?>" onclick="return confirm('Peringatan: Menghapus data siswa juga dapat menghilangkan akses login mereka. Lanjutkan?')" class="flex-none flex items-center justify-center bg-white border border-rose-200 text-rose-500 px-4 py-2.5 rounded-xl font-bold text-[11px] shadow-sm hover:bg-rose-50">
