@@ -8,16 +8,47 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'siswa') {
     exit();
 }
 
-// Ambil id_siswa dari session yang valid (berupa primary key angka)
+// Ambil id_siswa dari session yang valid
 $id_siswa   = $_SESSION['id_siswa'] ?? '';
 $nis_login  = $_SESSION['nis'] ?? $_SESSION['username'] ?? '';
 $nama_login = $_SESSION['nama'] ?? 'Siswa';
 
 require_once '../Model/m_tanggapan.php';
-$modelTanggapan = new m_tanggapan();
+require_once '../Model/m_aspirasi.php';
 
-// Ambil khusus data dari tabel history selesai menggunakan $id_siswa
-$list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
+$modelTanggapan = new m_tanggapan();
+$modelAspirasi  = new m_aspirasi();
+
+// 1. Ambil riwayat selesai dari tabel history/tanggapan
+$history_selesai = $modelTanggapan->getHistoryBySiswa($id_siswa);
+if (!is_array($history_selesai)) {
+    $history_selesai = [];
+}
+
+// 2. Ambil semua aspirasi siswa, lalu saring yang statusnya 'Ditolak'
+$all_aspirasi = $modelAspirasi->getAspirasiBySiswa($id_siswa);
+$history_ditolak = [];
+
+if (is_array($all_aspirasi)) {
+    foreach ($all_aspirasi as $asp) {
+        if (strtolower(trim($asp['status'] ?? '')) === 'ditolak') {
+            $asp['status_akhir']   = 'Ditolak';
+            $asp['tanggal_arsip']  = $asp['updated_at'] ?? $asp['created_at'] ?? '-';
+            $asp['feedback_admin'] = $asp['tanggapan'] ?? $asp['alasan_tolak'] ?? $asp['feedback'] ?? 'Pengaduan ditolak oleh admin.';
+            $asp['bukti_siswa']    = $asp['foto'] ?? $asp['bukti_siswa'] ?? '';
+            $asp['bukti_admin']    = '';
+            $history_ditolak[]     = $asp;
+        }
+    }
+}
+
+// 3. Gabungkan riwayat Ditolak dan Selesai
+$list_history = array_merge($history_ditolak, $history_selesai);
+
+// Urutkan berdasarkan ID terbesar (terbaru di atas)
+usort($list_history, function ($a, $b) {
+    return ($b['id_aspirasi'] ?? 0) <=> ($a['id_aspirasi'] ?? 0);
+});
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -25,7 +56,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Selesai - Portal Siswa</title>
+    <title>Riwayat Pengaduan - Portal Siswa</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- FontAwesome -->
@@ -84,7 +115,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                     <i class="fa-solid fa-clock-rotate-left text-base w-5 group-hover:text-white transition-colors"></i> Pengaduan
                 </a>
                 <a href="v_history_selesai_siswa" class="flex items-center gap-3.5 px-4 py-3.5 rounded-xl bg-cyan-600/10 text-cyan-400 border border-cyan-500/20 shadow-inner transition-all">
-                    <i class="fa-solid fa-circle-check text-base w-5"></i> <span class="font-bold">Riwayat </span>
+                    <i class="fa-solid fa-circle-check text-base w-5"></i> <span class="font-bold">Riwayat</span>
                 </a>
             </nav>
         </div>
@@ -117,7 +148,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                 </button>
                 <div>
                     <h2 class="text-lg font-bold text-slate-800">Arsip Laporan</h2>
-                    <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Daftar laporan fasilitas yang telah terselesaikan</p>
+                    <p class="text-[11px] text-slate-500 font-medium hidden sm:block">Daftar laporan fasilitas yang telah selesai maupun ditolak</p>
                 </div>
             </div>
 
@@ -133,14 +164,14 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
 
             <!-- PAGE TITLE -->
             <div>
-                <h3 class="text-2xl font-black text-slate-800 tracking-tight">Histori Laporan Selesai</h3>
-                <p class="text-sm text-slate-500 mt-1 max-w-2xl">Arsip seluruh laporan pengaduan Anda yang telah berhasil ditangani dan diselesaikan oleh pihak sarpras sekolah.</p>
+                <h3 class="text-2xl font-black text-slate-800 tracking-tight">Histori Pengaduan</h3>
+                <p class="text-sm text-slate-500 mt-1 max-w-2xl">Arsip seluruh laporan pengaduan Anda yang telah diselesaikan maupun yang ditolak oleh pihak sarpras sekolah.</p>
             </div>
 
             <!-- DATA CONTAINER -->
             <div class="bg-white rounded-3xl shadow-sm border border-slate-200/60 overflow-hidden flex flex-col relative">
-                <!-- Aksen Garis Hijau -->
-                <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+                <!-- Aksen Garis Atas -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500"></div>
 
                 <!-- DESKTOP TABLE VIEW -->
                 <div class="hidden lg:block overflow-x-auto min-h-[400px]">
@@ -150,21 +181,33 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                                 <th class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap w-20 text-center">ID</th>
                                 <th class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap">Detail Pengaduan Siswa</th>
                                 <th class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap text-center">Status</th>
-                                <th class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap">Bukti Penyelesaian Admin</th>
+                                <th class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-slate-400 whitespace-nowrap">Tanggapan / Bukti Admin</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 bg-white">
                             <?php if (!empty($list_history)): ?>
                                 <?php foreach ($list_history as $row):
-                                    $waktu = $row['tanggal_arsip'] ?? '-';
-                                    $keterangan = $row['ket'] ?? '-';
-                                    $feedback = $row['feedback_admin'] ?? '-';
+                                    $statusAkhir = $row['status_akhir'] ?? 'Selesai';
+                                    $isDitolak   = (strtolower(trim($statusAkhir)) === 'ditolak');
 
-                                    $bukti_siswa_raw = trim($row['bukti_siswa'] ?? '');
-                                    $web_siswa_url = !empty($bukti_siswa_raw) ? '../uploads/' . $bukti_siswa_raw : '';
+                                    $waktu       = $row['tanggal_arsip'] ?? '-';
+                                    $keterangan  = $row['ket'] ?? '-';
+                                    $feedback    = $row['feedback_admin'] ?? '-';
 
-                                    $bukti_admin_raw = trim($row['bukti_admin'] ?? '');
-                                    $web_admin_url = !empty($bukti_admin_raw) ? '../uploads/' . $bukti_admin_raw : '';
+                                    // Bersihkan prefix 'uploads/' jika sudah ada di database
+                                    $bukti_siswa_raw = preg_replace('#^(\.\./)?uploads/#', '', trim($row['bukti_siswa'] ?? ''));
+                                    $web_siswa_url   = !empty($bukti_siswa_raw) ? '../uploads/' . $bukti_siswa_raw : '';
+
+                                    $bukti_admin_raw = preg_replace('#^(\.\./)?uploads/#', '', trim($row['bukti_admin'] ?? ''));
+                                    $web_admin_url   = !empty($bukti_admin_raw) ? '../uploads/' . $bukti_admin_raw : '';
+
+                                    // Styling dinamis Selesai vs Ditolak
+                                    $badgeClass  = $isDitolak ? 'bg-rose-50 text-rose-700 border-rose-200/60' : 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
+                                    $dotClass    = $isDitolak ? 'bg-rose-500' : 'bg-emerald-500';
+                                    $iconBg      = $isDitolak ? 'bg-rose-100 border-rose-200 text-rose-600' : 'bg-emerald-100 border-emerald-200 text-emerald-600';
+                                    $iconClass   = $isDitolak ? 'fa-xmark' : 'fa-check';
+                                    $labelWaktu  = $isDitolak ? 'Ditolak:' : 'Selesai:';
+                                    $waktuIcon   = $isDitolak ? 'fa-ban' : 'fa-check-double';
                                 ?>
                                     <tr class="hover:bg-slate-50/50 transition-all group">
                                         <!-- KOLOM 1: ID -->
@@ -183,7 +226,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                                                     </div>
                                                     <div class="flex items-center gap-3 text-[11px] font-medium text-slate-400 mb-3">
                                                         <span title="Lokasi"><i class="fa-solid fa-location-dot text-slate-300 mr-1"></i> <?= htmlspecialchars($row['lokasi'] ?? '-') ?></span>
-                                                        <span title="Waktu Diselesaikan"><i class="fa-solid fa-check-double text-slate-300 mr-1"></i> Selesai: <?= $waktu != '-' ? date('d M Y, H:i', strtotime($waktu)) : '-' ?></span>
+                                                        <span><i class="fa-solid <?= $waktuIcon ?> text-slate-300 mr-1"></i> <?= $labelWaktu ?> <?= $waktu != '-' ? date('d M Y, H:i', strtotime($waktu)) : '-' ?></span>
                                                     </div>
                                                     <p class="text-slate-600 text-xs leading-relaxed line-clamp-3" title="<?= htmlspecialchars($keterangan) ?>">
                                                         <?= nl2br(htmlspecialchars($keterangan)) ?>
@@ -202,17 +245,17 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
 
                                         <!-- KOLOM 3: Status -->
                                         <td class="px-6 py-6 text-center align-top whitespace-nowrap">
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-[10px] border shadow-sm bg-emerald-50 text-emerald-700 border-emerald-200/60">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                                <?= htmlspecialchars($row['status_akhir'] ?? 'Selesai'); ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-[10px] border shadow-sm <?= $badgeClass ?>">
+                                                <span class="w-1.5 h-1.5 rounded-full <?= $dotClass ?>"></span>
+                                                <?= htmlspecialchars($statusAkhir); ?>
                                             </span>
                                         </td>
 
                                         <!-- KOLOM 4: Tanggapan Admin -->
                                         <td class="px-6 py-6 align-top">
                                             <div class="flex gap-4">
-                                                <div class="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-600 flex items-center justify-center shrink-0">
-                                                    <i class="fa-solid fa-check text-xs"></i>
+                                                <div class="w-8 h-8 rounded-full border flex items-center justify-center shrink-0 <?= $iconBg ?>">
+                                                    <i class="fa-solid <?= $iconClass ?> text-xs"></i>
                                                 </div>
                                                 <div class="flex-1">
                                                     <p class="text-slate-700 text-xs leading-relaxed mb-3">
@@ -236,7 +279,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                                                 <i class="fa-solid fa-folder-open text-5xl text-slate-300"></i>
                                             </div>
                                             <h4 class="text-lg font-bold text-slate-700">Belum Ada Histori</h4>
-                                            <p class="text-sm text-slate-500 mt-1 max-w-sm">Anda belum memiliki riwayat laporan pengaduan yang telah selesai ditangani.</p>
+                                            <p class="text-sm text-slate-500 mt-1 max-w-sm">Anda belum memiliki riwayat laporan pengaduan yang telah selesai maupun ditolak.</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -250,15 +293,27 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                     <?php if (!empty($list_history)): ?>
                         <div class="p-4 space-y-5">
                             <?php foreach ($list_history as $row):
-                                $waktu = $row['tanggal_arsip'] ?? '-';
-                                $bukti_siswa_raw = trim($row['bukti_siswa'] ?? '');
-                                $web_siswa_url = !empty($bukti_siswa_raw) ? '../uploads/' . $bukti_siswa_raw : '';
-                                $bukti_admin_raw = trim($row['bukti_admin'] ?? '');
-                                $web_admin_url = !empty($bukti_admin_raw) ? '../uploads/' . $bukti_admin_raw : '';
+                                $statusAkhir = $row['status_akhir'] ?? 'Selesai';
+                                $isDitolak   = (strtolower(trim($statusAkhir)) === 'ditolak');
+
+                                $waktu       = $row['tanggal_arsip'] ?? '-';
+                                $bukti_siswa_raw = preg_replace('#^(\.\./)?uploads/#', '', trim($row['bukti_siswa'] ?? ''));
+                                $web_siswa_url   = !empty($bukti_siswa_raw) ? '../uploads/' . $bukti_siswa_raw : '';
+                                $bukti_admin_raw = preg_replace('#^(\.\./)?uploads/#', '', trim($row['bukti_admin'] ?? ''));
+                                $web_admin_url   = !empty($bukti_admin_raw) ? '../uploads/' . $bukti_admin_raw : '';
+
+                                // Styling dinamis Mobile
+                                $lineClass   = $isDitolak ? 'bg-rose-500' : 'bg-emerald-500';
+                                $badgeClass  = $isDitolak ? 'bg-rose-50 text-rose-700 border-rose-200/60' : 'bg-emerald-50 text-emerald-700 border-emerald-200/60';
+                                $dotClass    = $isDitolak ? 'bg-rose-500' : 'bg-emerald-500';
+                                $iconBg      = $isDitolak ? 'bg-rose-50 text-rose-500 border-rose-100' : 'bg-emerald-50 text-emerald-500 border-emerald-100';
+                                $iconClass   = $isDitolak ? 'fa-xmark' : 'fa-check-double';
+                                $labelWaktu  = $isDitolak ? 'Ditolak:' : 'Selesai:';
+                                $labelAdmin  = $isDitolak ? 'Alasan Penolakan Admin:' : 'Hasil Perbaikan Admin:';
                             ?>
                                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
                                     <!-- Status Line -->
-                                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500"></div>
+                                    <div class="absolute left-0 top-0 bottom-0 w-1 <?= $lineClass ?>"></div>
 
                                     <div class="p-5 pl-6">
                                         <!-- Header Card -->
@@ -266,12 +321,14 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                                             <div>
                                                 <div class="flex items-center gap-2 mb-1">
                                                     <span class="text-[10px] font-bold text-slate-400">#<?= htmlspecialchars($row['id_aspirasi']) ?></span>
-                                                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-bold text-[9px] border bg-emerald-50 text-emerald-700 border-emerald-200/60">
-                                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> <?= htmlspecialchars($row['status_akhir'] ?? 'Selesai') ?>
+                                                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full font-bold text-[9px] border <?= $badgeClass ?>">
+                                                        <span class="w-1.5 h-1.5 rounded-full <?= $dotClass ?>"></span> <?= htmlspecialchars($statusAkhir) ?>
                                                     </span>
                                                 </div>
                                                 <h4 class="font-bold text-slate-800 text-sm"><?= htmlspecialchars($row['nama_kategori'] ?? '-') ?></h4>
-                                                <p class="text-[10px] font-medium text-slate-400 mt-1 flex items-center gap-1"><i class="fa-regular fa-calendar-check"></i> Selesai: <?= $waktu != '-' ? date('d M Y, H:i', strtotime($waktu)) : '-' ?></p>
+                                                <p class="text-[10px] font-medium text-slate-400 mt-1 flex items-center gap-1">
+                                                    <i class="fa-regular fa-calendar-check"></i> <?= $labelWaktu ?> <?= $waktu != '-' ? date('d M Y, H:i', strtotime($waktu)) : '-' ?>
+                                                </p>
                                             </div>
                                         </div>
 
@@ -290,11 +347,11 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                                         <!-- Tanggapan Admin -->
                                         <div class="border-t border-slate-100 pt-4">
                                             <div class="flex items-start gap-3">
-                                                <div class="w-7 h-7 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0 border border-emerald-100">
-                                                    <i class="fa-solid fa-check-double text-[10px]"></i>
+                                                <div class="w-7 h-7 rounded-full flex items-center justify-center shrink-0 border <?= $iconBg ?>">
+                                                    <i class="fa-solid <?= $iconClass ?> text-[10px]"></i>
                                                 </div>
                                                 <div class="flex-1 pt-0.5">
-                                                    <span class="block text-[10px] font-bold text-slate-400 mb-1">Hasil Perbaikan Admin:</span>
+                                                    <span class="block text-[10px] font-bold text-slate-400 mb-1"><?= $labelAdmin ?></span>
                                                     <p class="text-slate-700 text-xs leading-relaxed"><?= nl2br(htmlspecialchars($row['feedback_admin'] ?? '-')) ?></p>
 
                                                     <?php if (!empty($bukti_admin_raw)): ?>
@@ -316,7 +373,7 @@ $list_history = $modelTanggapan->getHistoryBySiswa($id_siswa);
                         <div class="p-16 text-center">
                             <i class="fa-solid fa-folder-open text-4xl mb-3 text-slate-300"></i>
                             <p class="text-sm font-bold text-slate-700">Belum Ada Histori</p>
-                            <p class="text-xs text-slate-500 mt-1">Belum ada riwayat laporan yang selesai ditangani.</p>
+                            <p class="text-xs text-slate-500 mt-1">Belum ada riwayat laporan yang selesai maupun ditolak.</p>
                         </div>
                     <?php endif; ?>
                 </div>
